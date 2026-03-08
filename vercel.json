@@ -1,0 +1,12 @@
+{
+  "buildCommand": "cd client && npm install && npx vite build",
+  "outputDirectory": "client/dist",
+  "framework": null,
+  "rewrites": [
+    { "source": "/api/trademarks/classes", "destination": "/api/trademarks/classes" },
+    { "source": "/api/trademarks/check", "destination": "/api/trademarks/check" },
+    { "source": "/api/trademarks/:id", "destination": "/api/trademarks/[id]" },
+    { "source": "/api/trademarks", "destination": "/api/trademarks/index" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ]
+}
