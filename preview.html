@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>トレマル - UIプレビュー</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+*,*:before,*:after{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#ff7b54;--primary-light:#fff0eb;--primary-dark:#e85d36;--secondary:#ffd56b;--secondary-light:#fff8e7;--accent:#7ec8e3;--accent-light:#e8f6fb;--success:#4ecdc4;--success-light:#e6f9f7;--warning:#ffe66d;--danger:#ff6b6b;--danger-light:#ffe8e8;--gray-50:#fafafa;--gray-100:#f5f5f5;--gray-200:#eeeeee;--gray-300:#e0e0e0;--gray-400:#bdbdbd;--gray-500:#9e9e9e;--gray-600:#757575;--gray-700:#616161;--gray-800:#424242;--gray-900:#2c2c2c;--radius-sm:8px;--radius-md:12px;--radius-lg:20px;--radius-xl:28px;--shadow-sm:0 2px 8px rgba(0,0,0,.06);--shadow-md:0 4px 16px rgba(0,0,0,.08);--shadow-lg:0 8px 32px rgba(0,0,0,.1);--font-main:"Zen Maru Gothic","Hiragino Sans","Hiragino Kaku Gothic ProN",sans-serif}
+body{font-family:var(--font-main);background:linear-gradient(135deg,#fff5f0,#fef9f5,#f0f8ff);color:var(--gray-800);min-height:100vh;line-height:1.7}
+.app{display:flex;flex-direction:column;min-height:100vh}
+.main-content{flex:1;max-width:960px;width:100%;margin:0 auto;padding:24px 20px 60px}
+.header{background:#fff;border-bottom:3px solid var(--secondary);padding:16px 24px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm)}
+.header-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--gray-900);cursor:pointer}
+.logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--primary),var(--secondary));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;font-weight:700}
+.logo-text{font-size:22px;font-weight:700;color:var(--primary-dark)}
+.logo-sub{font-size:11px;color:var(--gray-500);margin-top:-4px}
+.nav{display:flex;gap:6px}
+.nav-link{text-decoration:none;padding:8px 16px;border-radius:var(--radius-xl);font-size:14px;font-weight:500;color:var(--gray-600);transition:all .2s;cursor:pointer;border:none;background:none;font-family:var(--font-main)}
+.nav-link:hover{background:var(--primary-light);color:var(--primary)}
+.nav-link.active{background:var(--primary);color:#fff}
+.card{background:#fff;border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);transition:box-shadow .2s}
+.card:hover{box-shadow:var(--shadow-md)}
+.card-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.card-icon{width:44px;height:44px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:22px}
+.card-title{font-size:18px;font-weight:700;color:var(--gray-800)}
+.card-subtitle{font-size:13px;color:var(--gray-500)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border:none;border-radius:var(--radius-xl);font-family:var(--font-main);font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;text-decoration:none}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;box-shadow:0 4px 12px #ff7b544d}
+.btn-primary:hover{box-shadow:0 6px 20px #ff7b5466;transform:translateY(-1px)}
+.btn-secondary{background:var(--gray-100);color:var(--gray-700)}
+.btn-secondary:hover{background:var(--gray-200)}
+.btn-success{background:linear-gradient(135deg,var(--success),#3db8b0);color:#fff;box-shadow:0 4px 12px #4ecdc44d}
+.btn-danger{background:var(--danger-light);color:var(--danger)}
+.btn-sm{padding:8px 16px;font-size:13px}
+.btn-lg{padding:16px 36px;font-size:17px}
+.form-group{margin-bottom:20px}
+.form-label{display:block;font-size:14px;font-weight:600;color:var(--gray-700);margin-bottom:6px}
+.form-label .required{color:var(--danger);margin-left:4px;font-size:12px}
+.form-hint{font-size:12px;color:var(--gray-500);margin-top:4px}
+.form-input,.form-textarea{width:100%;padding:12px 16px;border:2px solid var(--gray-200);border-radius:var(--radius-md);font-family:var(--font-main);font-size:15px;color:var(--gray-800);background:#fff;transition:border-color .2s;outline:none}
+.form-input:focus,.form-textarea:focus{border-color:var(--primary);box-shadow:0 0 0 4px var(--primary-light)}
+.form-textarea{resize:vertical;min-height:100px}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:var(--radius-xl);font-size:12px;font-weight:600}
+.badge-draft{background:var(--gray-100);color:var(--gray-600)}
+.badge-reviewing{background:var(--secondary-light);color:#b8860b}
+.badge-submitted{background:var(--accent-light);color:#2980b9}
+.badge-examining{background:#f3e8ff;color:#7c3aed}
+.badge-registered{background:var(--success);color:#fff}
+.badge-rejected{background:var(--danger-light);color:var(--danger)}
+.search-box{position:relative}
+.search-box .search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--gray-400)}
+.search-box .form-input{padding-left:44px}
+.app-list{display:flex;flex-direction:column;gap:12px}
+.app-list-item{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;transition:all .2s;cursor:pointer}
+.app-list-item:hover{border-color:var(--primary);box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.app-list-item-info{flex:1;min-width:0}
+.app-list-item-name{font-size:16px;font-weight:700;color:var(--gray-800);margin-bottom:4px}
+.app-list-item-meta{font-size:13px;color:var(--gray-500);display:flex;gap:16px;flex-wrap:wrap}
+.steps{display:flex;justify-content:center;gap:8px;margin-bottom:32px;flex-wrap:wrap}
+.step{display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:var(--radius-xl);font-size:13px;font-weight:500;color:var(--gray-400);background:var(--gray-100);transition:all .3s;cursor:pointer;border:none;font-family:var(--font-main)}
+.step.active{background:var(--primary);color:#fff;box-shadow:0 4px 12px #ff7b544d}
+.step.completed{background:var(--success);color:#fff}
+.step-number{width:24px;height:24px;border-radius:50%;background:#ffffff40;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.class-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.class-chip{display:flex;align-items:center;gap:8px;padding:10px 14px;border:2px solid var(--gray-200);border-radius:var(--radius-md);cursor:pointer;transition:all .2s;font-size:13px;background:#fff}
+.class-chip:hover{border-color:var(--accent);background:var(--accent-light)}
+.class-chip.selected{border-color:var(--primary);background:var(--primary-light);color:var(--primary-dark);font-weight:600}
+.class-chip-id{font-weight:700;color:var(--gray-500);font-size:11px;white-space:nowrap}
+.class-chip.selected .class-chip-id{color:var(--primary)}
+.cost-card{background:linear-gradient(135deg,var(--secondary-light),#fff);border:2px solid var(--secondary);border-radius:var(--radius-lg);padding:24px}
+.cost-total{font-size:32px;font-weight:700;color:var(--primary-dark);text-align:center;margin-top:12px}
+.cost-breakdown{margin-top:16px;font-size:14px;color:var(--gray-600)}
+.cost-breakdown dt{font-weight:600;margin-top:8px}
+.cost-breakdown dd{margin-left:16px}
+.hero{text-align:center;padding:48px 20px 40px}
+.hero-title{font-size:32px;font-weight:700;color:var(--gray-800);margin-bottom:12px;line-height:1.4}
+.hero-title .highlight{color:var(--primary)}
+.hero-desc{font-size:16px;color:var(--gray-500);max-width:500px;margin:0 auto 28px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:28px}
+.stat-card{background:#fff;border-radius:var(--radius-md);padding:18px;text-align:center;border:1px solid var(--gray-200)}
+.stat-number{font-size:28px;font-weight:700}
+.stat-label{font-size:12px;color:var(--gray-500);margin-top:2px}
+.empty-state{text-align:center;padding:60px 20px;color:var(--gray-500)}
+.empty-state-icon{font-size:56px;margin-bottom:16px}
+.empty-state-title{font-size:18px;font-weight:700;color:var(--gray-700);margin-bottom:8px}
+.empty-state-text{font-size:14px;margin-bottom:24px}
+.footer{text-align:center;padding:24px;font-size:12px;color:var(--gray-400);border-top:1px solid var(--gray-200);background:#fff}
+.timeline{position:relative;padding-left:28px}
+.timeline:before{content:"";position:absolute;left:10px;top:8px;bottom:8px;width:3px;background:var(--gray-200);border-radius:2px}
+.timeline-item{position:relative;padding-bottom:20px}
+.timeline-item:before{content:"";position:absolute;left:-22px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--gray-300);border:3px solid white;box-shadow:0 0 0 2px var(--gray-200)}
+.timeline-item:first-child:before{background:var(--primary);box-shadow:0 0 0 2px var(--primary)}
+.timeline-date{font-size:12px;color:var(--gray-500)}
+.timeline-text{font-size:14px;font-weight:500;color:var(--gray-700)}
+.mt-8{margin-top:8px}.mt-16{margin-top:16px}.mt-24{margin-top:24px}
+.mb-8{margin-bottom:8px}.mb-16{margin-bottom:16px}.mb-24{margin-bottom:24px}
+.text-center{text-align:center}.text-sm{font-size:13px}.text-gray{color:var(--gray-500)}
+
+/* Preview navigation tabs */
+.preview-tabs{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid var(--secondary);padding:10px 20px;display:flex;justify-content:center;gap:8px;z-index:200;flex-wrap:wrap;box-shadow:0 -4px 16px rgba(0,0,0,.08)}
+.preview-tab{padding:8px 18px;border:2px solid var(--gray-200);border-radius:var(--radius-xl);background:#fff;font-family:var(--font-main);font-size:13px;font-weight:600;cursor:pointer;color:var(--gray-600);transition:all .2s}
+.preview-tab:hover{border-color:var(--primary);color:var(--primary)}
+.preview-tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.page{display:none}.page.active{display:block}
+.preview-label{position:fixed;top:70px;right:20px;background:var(--primary);color:#fff;padding:6px 16px;border-radius:var(--radius-xl);font-size:12px;font-weight:600;z-index:150;box-shadow:var(--shadow-md)}
+.main-content{padding-bottom:100px}
+@media(max-width:640px){.header-inner{flex-direction:column;gap:12px}.hero-title{font-size:24px}.stats-grid{grid-template-columns:repeat(2,1fr)}.class-grid{grid-template-columns:1fr}.steps{flex-direction:column;align-items:stretch}.app-list-item{flex-direction:column;align-items:flex-start}.preview-tabs{gap:4px;padding:8px 10px}.preview-tab{padding:6px 12px;font-size:11px}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="header-inner">
+        <div class="logo" onclick="showPage('home')">
+          <div class="logo-icon">TM</div>
+          <div>
+            <div class="logo-text">トレマル</div>
+            <div class="logo-sub">商標登録かんたんナビ</div>
+          </div>
+        </div>
+        <nav class="nav">
+          <button class="nav-link active" id="nav-home" onclick="showPage('home')">ホーム</button>
+          <button class="nav-link" id="nav-new" onclick="showPage('new')">新規出願</button>
+          <button class="nav-link" id="nav-search" onclick="showPage('search')">商標検索</button>
+        </nav>
+      </div>
+    </header>
+
+    <div class="preview-label">UIプレビュー</div>
+
+    <main class="main-content">
+
+      <!-- ===== ホーム（空） ===== -->
+      <div class="page active" id="page-home">
+        <div class="hero">
+          <h1 class="hero-title">
+            あなたのブランドを<br>
+            <span class="highlight">かんたんに守ろう</span>
+          </h1>
+          <p class="hero-desc">
+            商標登録の手続きをステップバイステップでサポート。<br>
+            むずかしい手続きも、トレマルと一緒なら安心です。
+          </p>
+          <button class="btn btn-primary btn-lg" onclick="showPage('new')">新しく出願をはじめる</button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-number" style="color:var(--primary)">3</div><div class="stat-label">すべての出願</div></div>
+          <div class="stat-card"><div class="stat-number" style="color:var(--gray-500)">1</div><div class="stat-label">下書き</div></div>
+          <div class="stat-card"><div class="stat-number" style="color:var(--accent)">1</div><div class="stat-label">手続き中</div></div>
+          <div class="stat-card"><div class="stat-number" style="color:var(--success)">1</div><div class="stat-label">登録完了</div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background:var(--primary-light)">📋</div>
+            <div>
+              <div class="card-title">出願リスト</div>
+              <div class="card-subtitle">あなたの商標出願を管理</div>
+            </div>
+          </div>
+          <div class="app-list">
+            <div class="app-list-item" onclick="showPage('detail')">
+              <div class="app-list-item-info">
+                <div class="app-list-item-name">スマイルカフェ</div>
+                <div class="app-list-item-meta">
+                  <span>文字</span><span>2区分</span><span>2026/03/08</span>
+                </div>
+              </div>
+              <span class="badge badge-examining">審査中</span>
+            </div>
+            <div class="app-list-item">
+              <div class="app-list-item-info">
+                <div class="app-list-item-name">テックノバ</div>
+                <div class="app-list-item-meta">
+                  <span>文字+図形</span><span>3区分</span><span>2026/02/20</span>
+                </div>
+              </div>
+              <span class="badge badge-registered">登録完了</span>
+            </div>
+            <div class="app-list-item">
+              <div class="app-list-item-info">
+                <div class="app-list-item-name">ハナマルベーカリー</div>
+                <div class="app-list-item-meta">
+                  <span>文字</span><span>1区分</span><span>2026/03/05</span>
+                </div>
+              </div>
+              <span class="badge badge-draft">下書き</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 新規出願 Step1 ===== -->
+      <div class="page" id="page-new">
+        <h1 style="font-size:22px;font-weight:700;text-align:center;margin-bottom:24px">✏️ 新しい商標を出願する</h1>
+        <div class="steps">
+          <div class="step active"><div class="step-number">1</div>商標情報</div>
+          <div class="step"><div class="step-number">2</div>区分えらび</div>
+          <div class="step"><div class="step-number">3</div>出願人情報</div>
+          <div class="step"><div class="step-number">4</div>確認＆提出</div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background:var(--primary-light)">🏷️</div>
+            <div>
+              <div class="card-title">商標の情報を入力しよう</div>
+              <div class="card-subtitle">登録したいブランド名やロゴの情報を教えてね</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">商標名<span class="required">*必須</span></label>
+            <input type="text" class="form-input" placeholder="例：トレマル" value="スマイルカフェ">
+            <div class="form-hint">登録したいブランド名・サービス名を入力</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">商標のタイプ</label>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <label style="display:flex;align-items:center;gap:12px;padding:12px 16px;border:2px solid var(--primary);border-radius:var(--radius-md);cursor:pointer;background:var(--primary-light)">
+                <div style="width:20px;height:20px;border-radius:50%;border:2px solid var(--primary);display:flex;align-items:center;justify-content:center">
+                  <div style="width:10px;height:10px;border-radius:50%;background:var(--primary)"></div>
+                </div>
+                <div><div style="font-weight:600;font-size:14px">文字商標</div><div style="font-size:12px;color:var(--gray-500)">ブランド名やキャッチフレーズなど</div></div>
+              </label>
+              <label style="display:flex;align-items:center;gap:12px;padding:12px 16px;border:2px solid var(--gray-200);border-radius:var(--radius-md);cursor:pointer;background:white">
+                <div style="width:20px;height:20px;border-radius:50%;border:2px solid var(--gray-300)"></div>
+                <div><div style="font-weight:600;font-size:14px">図形商標</div><div style="font-size:12px;color:var(--gray-500)">ロゴやマークなど</div></div>
+              </label>
+              <label style="display:flex;align-items:center;gap:12px;padding:12px 16px;border:2px solid var(--gray-200);border-radius:var(--radius-md);cursor:pointer;background:white">
+                <div style="width:20px;height:20px;border-radius:50%;border:2px solid var(--gray-300)"></div>
+                <div><div style="font-weight:600;font-size:14px">結合商標</div><div style="font-size:12px;color:var(--gray-500)">文字とロゴの組み合わせ</div></div>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">補足説明</label>
+            <textarea class="form-textarea" placeholder="商標の使い方や特徴があれば教えてね（任意）"></textarea>
+          </div>
+          <div style="display:flex;justify-content:flex-end">
+            <button class="btn btn-primary" onclick="showPage('step2')">次へ進む</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 新規出願 Step2（区分選択） ===== -->
+      <div class="page" id="page-step2">
+        <h1 style="font-size:22px;font-weight:700;text-align:center;margin-bottom:24px">✏️ 新しい商標を出願する</h1>
+        <div class="steps">
+          <div class="step completed"><div class="step-number">✓</div>商標情報</div>
+          <div class="step active"><div class="step-number">2</div>区分えらび</div>
+          <div class="step"><div class="step-number">3</div>出願人情報</div>
+          <div class="step"><div class="step-number">4</div>確認＆提出</div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background:var(--accent-light)">📂</div>
+            <div>
+              <div class="card-title">区分をえらぼう</div>
+              <div class="card-subtitle">商標を使う商品・サービスの分野をえらんでね</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="search-box">
+              <span class="search-icon">🔍</span>
+              <input type="text" class="form-input" placeholder="キーワードで区分を絞り込み...">
+            </div>
+          </div>
+          <div class="mb-16" style="display:flex;flex-wrap:wrap;gap:6px">
+            <span class="text-sm" style="font-weight:600;margin-right:4px">選択中：</span>
+            <span class="badge badge-submitted" style="cursor:pointer">第30類 調味料・菓子 ×</span>
+            <span class="badge badge-submitted" style="cursor:pointer">第43類 飲食・宿泊 ×</span>
+          </div>
+          <div class="class-grid">
+            <div class="class-chip"><span class="class-chip-id">第9類</span><span>電子機器・ソフトウェア</span></div>
+            <div class="class-chip"><span class="class-chip-id">第25類</span><span>被服・履物</span></div>
+            <div class="class-chip selected"><span class="class-chip-id">第30類</span><span>調味料・菓子</span></div>
+            <div class="class-chip"><span class="class-chip-id">第35類</span><span>広告・経営</span></div>
+            <div class="class-chip"><span class="class-chip-id">第41類</span><span>教育・娯楽</span></div>
+            <div class="class-chip"><span class="class-chip-id">第42類</span><span>IT・科学技術</span></div>
+            <div class="class-chip selected"><span class="class-chip-id">第43類</span><span>飲食・宿泊</span></div>
+            <div class="class-chip"><span class="class-chip-id">第44類</span><span>医療・美容</span></div>
+          </div>
+          <div class="cost-card mt-24">
+            <div style="font-weight:600;font-size:14px">💰 費用の目安</div>
+            <div class="cost-total">&yen;86,400</div>
+            <div class="cost-breakdown">
+              <dt>出願料</dt><dd>&yen;20,600</dd>
+              <dt>登録料（10年分）</dt><dd>&yen;65,800</dd>
+            </div>
+            <div class="form-hint mt-8">※ 特許庁に納付する費用の目安です</div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:24px">
+            <button class="btn btn-secondary" onclick="showPage('new')">もどる</button>
+            <button class="btn btn-primary" onclick="showPage('step4')">次へ進む</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 新規出願 Step4（確認） ===== -->
+      <div class="page" id="page-step4">
+        <h1 style="font-size:22px;font-weight:700;text-align:center;margin-bottom:24px">✏️ 新しい商標を出願する</h1>
+        <div class="steps">
+          <div class="step completed"><div class="step-number">✓</div>商標情報</div>
+          <div class="step completed"><div class="step-number">✓</div>区分えらび</div>
+          <div class="step completed"><div class="step-number">✓</div>出願人情報</div>
+          <div class="step active"><div class="step-number">4</div>確認＆提出</div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background:var(--secondary-light)">✅</div>
+            <div>
+              <div class="card-title">内容を確認しよう</div>
+              <div class="card-subtitle">入力内容に間違いがないかチェックしてね</div>
+            </div>
+          </div>
+          <div style="background:var(--gray-50);border-radius:var(--radius-md);padding:20px;margin-bottom:20px">
+            <table style="width:100%;font-size:14px">
+              <tr><td style="font-weight:600;padding:8px 0;width:120px;color:var(--gray-600)">商標名</td><td style="padding:8px 0;font-weight:700;font-size:16px">スマイルカフェ</td></tr>
+              <tr><td style="font-weight:600;padding:8px 0;color:var(--gray-600)">タイプ</td><td style="padding:8px 0">文字</td></tr>
+              <tr><td style="font-weight:600;padding:8px 0;vertical-align:top;color:var(--gray-600)">区分</td><td style="padding:8px 0"><span class="badge badge-submitted" style="margin-right:4px">第30類 調味料・菓子</span><span class="badge badge-submitted">第43類 飲食・宿泊</span></td></tr>
+              <tr><td style="font-weight:600;padding:8px 0;color:var(--gray-600)">出願人名</td><td style="padding:8px 0">株式会社スマイル</td></tr>
+              <tr><td style="font-weight:600;padding:8px 0;color:var(--gray-600)">住所</td><td style="padding:8px 0">東京都渋谷区神南1-2-3</td></tr>
+            </table>
+          </div>
+          <div class="cost-card mb-24">
+            <div style="font-weight:600;font-size:14px">💰 費用の目安</div>
+            <div class="cost-total">&yen;86,400</div>
+          </div>
+          <div style="display:flex;justify-content:space-between">
+            <button class="btn btn-secondary">もどる</button>
+            <button class="btn btn-success btn-lg" onclick="showPage('detail')">出願を提出する</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 出願詳細 ===== -->
+      <div class="page" id="page-detail">
+        <button class="btn btn-secondary btn-sm mb-24" onclick="showPage('home')">← ホームにもどる</button>
+        <div class="card mb-24">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
+            <div>
+              <h1 style="font-size:26px;font-weight:700;margin-bottom:4px">スマイルカフェ</h1>
+              <div class="text-sm text-gray">文字 ・ 2区分 ・ 2026/03/08 作成</div>
+            </div>
+            <span class="badge badge-examining" style="font-size:14px;padding:6px 16px">審査中</span>
+          </div>
+          <div style="margin:28px 0;display:flex;gap:4px;flex-wrap:wrap">
+            <div style="flex:1;min-width:60px;padding:8px 4px;text-align:center;font-size:11px;font-weight:600;border-radius:var(--radius-sm);background:var(--primary);color:white">下書き</div>
+            <div style="flex:1;min-width:60px;padding:8px 4px;text-align:center;font-size:11px;font-weight:600;border-radius:var(--radius-sm);background:var(--primary);color:white">確認中</div>
+            <div style="flex:1;min-width:60px;padding:8px 4px;text-align:center;font-size:11px;font-weight:600;border-radius:var(--radius-sm);background:var(--primary);color:white">出願済み</div>
+            <div style="flex:1;min-width:60px;padding:8px 4px;text-align:center;font-size:11px;font-weight:600;border-radius:var(--radius-sm);background:var(--primary);color:white">審査中</div>
+            <div style="flex:1;min-width:60px;padding:8px 4px;text-align:center;font-size:11px;font-weight:600;border-radius:var(--radius-sm);background:var(--gray-100);color:var(--gray-400)">公開中</div>
+            <div style="flex:1;min-width:60px;padding:8px 4px;text-align:center;font-size:11px;font-weight:600;border-radius:var(--radius-sm);background:var(--gray-100);color:var(--gray-400)">登録完了</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-primary btn-sm">次のステップへ進める</button>
+            <button class="btn btn-danger btn-sm">削除する</button>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-icon" style="background:var(--accent-light)">👤</div>
+              <div class="card-title">出願人情報</div>
+            </div>
+            <div style="font-size:14px">
+              <div style="margin-bottom:8px"><span class="text-gray">出願人名：</span><strong>株式会社スマイル</strong></div>
+              <div><span class="text-gray">住所：</span>東京都渋谷区神南1-2-3</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-icon" style="background:var(--secondary-light)">💰</div>
+              <div class="card-title">費用の目安</div>
+            </div>
+            <div class="cost-total" style="font-size:24px">&yen;86,400</div>
+            <div class="cost-breakdown">
+              <dt>出願料</dt><dd>&yen;20,600</dd>
+              <dt>登録料（10年分）</dt><dd>&yen;65,800</dd>
+            </div>
+          </div>
+        </div>
+        <div class="card mt-16">
+          <div class="card-header">
+            <div class="card-icon" style="background:var(--primary-light)">📝</div>
+            <div class="card-title">更新履歴</div>
+          </div>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-date">2026/03/08 14:30</div>
+              <div class="timeline-text"><span class="badge badge-examining" style="margin-right:8px">審査中</span>審査中に更新</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-date">2026/03/08 12:00</div>
+              <div class="timeline-text"><span class="badge badge-submitted" style="margin-right:8px">出願済み</span>出願済みに更新</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-date">2026/03/08 10:30</div>
+              <div class="timeline-text"><span class="badge badge-reviewing" style="margin-right:8px">確認中</span>確認中に更新</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-date">2026/03/08 09:00</div>
+              <div class="timeline-text"><span class="badge badge-draft" style="margin-right:8px">下書き</span>下書き作成</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 商標検索 ===== -->
+      <div class="page" id="page-search">
+        <div style="text-align:center;margin-bottom:32px">
+          <h1 class="hero-title" style="font-size:24px;margin-bottom:8px">🔍 商標かんたん検索</h1>
+          <p class="text-gray">登録したい商標名がすでに使われていないかチェックしよう</p>
+        </div>
+        <div class="card">
+          <div class="form-group">
+            <label class="form-label">商標名を入力してね</label>
+            <div style="display:flex;gap:12px">
+              <input type="text" class="form-input" placeholder="例：トレマル、スマイルカフェ..." value="フレッシュジュース">
+              <button class="btn btn-primary">検索する</button>
+            </div>
+          </div>
+          <div class="mt-24">
+            <div class="card" style="background:var(--success-light);border:2px solid var(--success)">
+              <div style="text-align:center;padding:16px">
+                <div style="font-size:40px;margin-bottom:8px">✅</div>
+                <div style="font-size:18px;font-weight:700;margin-bottom:8px">類似する商標は見つかりませんでした！</div>
+                <p class="text-sm text-gray">「フレッシュジュース」に類似する商標は見つかりませんでした</p>
+              </div>
+            </div>
+            <div class="text-center mt-24">
+              <button class="btn btn-primary btn-lg" onclick="showPage('new')">この商標で出願をはじめる</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 検索結果（類似あり） ===== -->
+      <div class="page" id="page-search-similar">
+        <div style="text-align:center;margin-bottom:32px">
+          <h1 class="hero-title" style="font-size:24px;margin-bottom:8px">🔍 商標かんたん検索</h1>
+          <p class="text-gray">登録したい商標名がすでに使われていないかチェックしよう</p>
+        </div>
+        <div class="card">
+          <div class="form-group">
+            <label class="form-label">商標名を入力してね</label>
+            <div style="display:flex;gap:12px">
+              <input type="text" class="form-input" placeholder="例：トレマル、スマイルカフェ..." value="スマイルカフェ">
+              <button class="btn btn-primary">検索する</button>
+            </div>
+          </div>
+          <div class="mt-24">
+            <div class="card" style="background:var(--danger-light);border:2px solid var(--danger)">
+              <div style="text-align:center;padding:16px">
+                <div style="font-size:40px;margin-bottom:8px">⚠️</div>
+                <div style="font-size:18px;font-weight:700;margin-bottom:8px">類似する商標が見つかりました</div>
+                <p class="text-sm text-gray">「スマイルカフェ」に類似する商標が 1 件見つかりました</p>
+              </div>
+              <div class="mt-16">
+                <h3 style="font-size:14px;font-weight:600;margin-bottom:8px">類似商標一覧</h3>
+                <div style="padding:10px 14px;background:white;border-radius:8px;display:flex;justify-content:space-between;align-items:center">
+                  <span style="font-weight:600">スマイルカフェ</span>
+                  <span class="badge badge-examining">審査中</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <footer class="footer">
+      トレマル - 商標登録かんたんナビ &copy; 2026
+    </footer>
+  </div>
+
+  <!-- Preview navigation -->
+  <div class="preview-tabs">
+    <button class="preview-tab active" onclick="showPage('home')">ホーム</button>
+    <button class="preview-tab" onclick="showPage('new')">出願 Step1</button>
+    <button class="preview-tab" onclick="showPage('step2')">出願 Step2</button>
+    <button class="preview-tab" onclick="showPage('step4')">出願 確認</button>
+    <button class="preview-tab" onclick="showPage('detail')">出願詳細</button>
+    <button class="preview-tab" onclick="showPage('search')">検索(OK)</button>
+    <button class="preview-tab" onclick="showPage('search-similar')">検索(類似)</button>
+  </div>
+
+  <script>
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + id).classList.add('active');
+      document.querySelectorAll('.preview-tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      // Update nav
+      document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+      if (id === 'home') document.getElementById('nav-home').classList.add('active');
+      else if (id === 'new' || id === 'step2' || id === 'step4') document.getElementById('nav-new').classList.add('active');
+      else if (id === 'search' || id === 'search-similar') document.getElementById('nav-search').classList.add('active');
+      else document.getElementById('nav-home').classList.add('active');
+      window.scrollTo(0, 0);
+    }
+  </script>
+</body>
+</html>
